@@ -1,0 +1,154 @@
+/* 超频实验室 · 样式：深色机房风，琥珀主色 */
+:root{
+  --bg:#0b0e11; --panel:#12161b; --panel2:#171d24; --line:#232c36;
+  --ink:#dbe4ec; --muted:#8494a5; --dim:#5b6a79;
+  --acc:#ffb300; --acc2:#37d99a; --bad:#ff5252; --warn:#ff9f43; --info:#41b8e0;
+  --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;
+  background-image:radial-gradient(ellipse 900px 400px at 70% -100px,rgba(255,179,0,.06),transparent 60%)}
+button,[role="button"],select,input{font-family:inherit}
+button,select,input[type="text"]{min-height:40px}
+.wrap{max-width:1080px;margin:0 auto;padding:14px 14px 60px}
+
+/* ---------- 标题界面 ---------- */
+.title-screen{min-height:calc(100vh - 90px);display:flex;align-items:center;justify-content:center;text-align:center;padding:20px 0}
+.title-inner{max-width:680px}
+.title-kicker{font-family:var(--mono);letter-spacing:.35em;font-size:12px;color:var(--dim);margin:0 0 10px}
+.title-name{font-size:64px;line-height:1.05;margin:0 0 14px;letter-spacing:.02em}
+.title-accent{color:var(--acc)}
+.title-sub{color:var(--muted);font-size:16px;margin:0 auto 26px;max-width:560px}
+.title-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:28px;text-align:left}
+.title-card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px}
+.title-card b{display:block;font-size:14px;margin-bottom:4px}
+.title-card span{font-size:12.5px;color:var(--muted);line-height:1.5;display:block}
+.title-best{color:var(--acc);font-family:var(--mono);font-size:13px;margin:16px 0 0;min-height:20px}
+.title-warn{color:var(--dim);font-size:12.5px;margin:18px auto 0;max-width:520px}
+@media (max-width:640px){.title-name{font-size:44px}.title-cards{grid-template-columns:1fr}}
+
+/* ---------- 顶部状态栏 ---------- */
+.statusbar{position:sticky;top:0;z-index:30;background:rgba(11,14,17,.92);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);margin:0 -14px;padding:10px 14px}
+.sb-row{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;max-width:1080px;margin:0 auto}
+.money{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--acc)}
+.money small{font-size:12px;color:var(--muted);font-weight:400;margin-right:6px}
+.sb-build{display:flex;flex-wrap:wrap;gap:6px;font-size:12.5px;flex:1}
+.chip{border:1px solid var(--line);background:var(--panel);border-radius:4px;padding:3px 9px;color:var(--muted);font-family:var(--mono)}
+.chip b{color:var(--ink);font-weight:600}
+.chip .q-S{color:#ffd54a}.chip .q-A{color:var(--acc2)}.chip .q-B{color:var(--info)}.chip .q-C{color:var(--warn)}
+.chip.empty{color:var(--dim);border-style:dashed}
+
+/* ---------- 步骤标签页 ---------- */
+.tabs{display:flex;gap:6px;margin:16px 0 14px;flex-wrap:wrap}
+.tab{flex:1 1 auto;min-width:76px;padding:10px 8px;background:var(--panel);border:1px solid var(--line);
+  border-radius:6px;color:var(--muted);font-size:15px;font-weight:600;cursor:pointer;text-align:center}
+.tab[aria-selected="true"]{background:var(--panel2);color:var(--acc);border-color:var(--acc)}
+.tab .step{font-family:var(--mono);font-size:11px;color:var(--dim);display:block;font-weight:400}
+.tab[aria-selected="true"] .step{color:var(--acc)}
+
+.panel{display:none}
+.panel.on{display:block}
+h2{font-size:17px;margin:22px 0 4px;color:var(--ink)}
+h2:first-child{margin-top:4px}
+.hint{color:var(--muted);font-size:13px;margin:0 0 12px}
+.cat-note{font-size:12.5px;color:var(--dim);font-family:var(--mono)}
+
+/* ---------- 商店 ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.card.owned{border-color:var(--acc2)}
+.card h3{margin:0;font-size:15.5px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.card h3 .brand{font-size:11px;font-family:var(--mono);color:var(--dim);font-weight:400}
+.specs{font-size:12.5px;color:var(--muted);font-family:var(--mono);line-height:1.7}
+.specs b{color:var(--ink);font-weight:600}
+.card .foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:8px}
+.price{font-family:var(--mono);font-weight:700;color:var(--acc);font-size:16px}
+.recycle{font-size:11.5px;color:var(--dim);font-family:var(--mono)}
+.btn{background:var(--acc);color:#14100a;border:0;border-radius:6px;font-weight:700;padding:9px 16px;cursor:pointer;font-size:14px}
+.btn:hover{filter:brightness(1.08)}
+.btn:disabled{background:#2a323c;color:var(--dim);cursor:not-allowed;filter:none}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.btn.green{background:var(--acc2);color:#08130d}
+.btn.big{width:100%;padding:13px;font-size:16px}
+.btn.small{min-height:32px;padding:5px 10px;font-size:12.5px}
+.tag{display:inline-block;font-size:11px;font-family:var(--mono);padding:1px 7px;border-radius:3px;border:1px solid var(--line);color:var(--muted)}
+.tag.ok{color:var(--acc2);border-color:var(--acc2)}
+.tag.no{color:var(--bad);border-color:var(--bad)}
+.tag.skt{color:var(--info)}
+.grade{font-family:var(--mono);font-weight:700}
+.q-S{color:#ffd54a}.q-A{color:var(--acc2)}.q-B{color:var(--info)}.q-C{color:var(--warn)}
+
+/* ---------- 超频台 ---------- */
+.bench{display:grid;grid-template-columns:1fr 340px;gap:14px;align-items:start}
+@media (max-width:820px){.bench{grid-template-columns:1fr}}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px}
+.ctl{margin-bottom:20px}
+.ctl:last-child{margin-bottom:4px}
+.ctl-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.ctl-head label{font-weight:600}
+.ctl-head .val{font-family:var(--mono);font-size:18px;color:var(--acc)}
+.ctl-head .val small{font-size:12px;color:var(--muted)}
+input[type="range"]{width:100%;accent-color:var(--acc);height:36px;cursor:pointer}
+.scale{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);font-family:var(--mono)}
+select{background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px 10px;width:100%;font-size:14px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.readouts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ro{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:10px 12px}
+.ro .k{font-size:11.5px;color:var(--muted)}
+.ro .v{font-family:var(--mono);font-size:20px;font-weight:700}
+.ro .v small{font-size:12px;color:var(--muted);font-weight:400}
+.ro.hot .v{color:var(--bad)} .ro.warm .v{color:var(--warn)} .ro.cool .v{color:var(--acc2)}
+.ro.volt .v{color:var(--acc)}
+.meter{height:8px;background:#0a0d10;border-radius:4px;overflow:hidden;margin-top:6px;border:1px solid var(--line)}
+.meter i{display:block;height:100%;background:var(--acc2);transition:width .25s}
+.warnline{font-size:13px;margin-top:10px;min-height:20px}
+.warnline .w{color:var(--warn)} .warnline .b{color:var(--bad)} .warnline .g{color:var(--acc2)}
+
+/* ---------- 压力测试 / 跑分 ---------- */
+.testbox{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px;margin-bottom:14px}
+canvas#curve{width:100%;height:150px;background:#0a0d10;border:1px solid var(--line);border-radius:6px;display:block}
+.prog{height:14px;background:#0a0d10;border:1px solid var(--line);border-radius:7px;overflow:hidden;margin:12px 0 6px}
+.prog i{display:block;height:100%;width:0;background:var(--acc);transition:width .1s linear}
+.teststat{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:13.5px;color:var(--muted)}
+.teststat b{color:var(--ink)}
+
+/* ---------- 结算界面 ---------- */
+.overlay{position:fixed;inset:0;background:rgba(5,7,9,.86);z-index:70;display:flex;align-items:center;justify-content:center;padding:20px}
+.overlay[hidden]{display:none}
+.overlay-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:28px 26px;max-width:520px;width:100%;text-align:center}
+.res-kicker{font-family:var(--mono);letter-spacing:.3em;font-size:12px;color:var(--acc2);margin:0 0 6px}
+.res-title{font-size:20px;margin:0 0 4px}
+.scorebig{font-family:var(--mono);font-size:44px;font-weight:800;color:var(--acc);text-align:center;padding:8px 0 2px}
+.scoremeta{text-align:center;color:var(--muted);font-size:13px;font-family:var(--mono)}
+#res-money{color:var(--acc2);margin-top:6px;font-size:15px}
+.res-rank{margin:14px 0 4px;font-size:14px;color:var(--ink)}
+.res-rank b{color:var(--acc)}
+.submitrow{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.submitrow input[type="text"]{flex:1 1 160px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;color:var(--ink);padding:9px 12px;font-size:15px}
+.res-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.res-actions .btn{flex:1 1 auto}
+
+/* ---------- 排行榜 ---------- */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{color:var(--muted);font-weight:600;text-align:left;padding:8px 8px;border-bottom:1px solid var(--line);font-size:12.5px}
+td{padding:9px 8px;border-bottom:1px solid #1a2129;font-family:var(--mono)}
+td.name{font-family:var(--sans);font-weight:600}
+tr.top1 td{color:var(--acc)} tr.top1 td.name{color:var(--acc)}
+.rank{font-weight:800}
+.empty-lb{color:var(--dim);text-align:center;padding:28px 0;font-size:14px}
+@media (max-width:640px){ .lb-hide,.lb-proj{display:none} }
+
+/* ---------- 提示 & 蓝屏 ---------- */
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:#1d242d;border:1px solid var(--acc);
+  color:var(--ink);padding:11px 18px;border-radius:8px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:90;max-width:92vw;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#bsod{position:fixed;inset:0;background:#0d5aa6;color:#fff;z-index:80;display:none;padding:12vh 8vw;font-family:var(--sans)}
+#bsod.on{display:block}
+#bsod .face{font-size:90px;font-weight:200;line-height:1}
+#bsod p{font-size:19px;max-width:560px;line-height:1.6}
+#bsod .code{font-family:var(--mono);font-size:13px;opacity:.85}
+#bsod button{margin-top:26px;background:#fff;color:#0d5aa6;border:0;border-radius:4px;padding:11px 22px;font-weight:700;cursor:pointer;font-size:15px}
+.foot-note{color:var(--dim);font-size:12.5px;margin-top:26px;text-align:center}

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="data:," />
+<title>超频实验室 · 电脑超频模拟器</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ 标题 / 开始界面 ============ -->
+  <section id="screen-title" class="title-screen">
+    <div class="title-inner">
+      <p class="title-kicker">OVERLOCK LAB · 单机模拟经营</p>
+      <h1 class="title-name">超频<span class="title-accent">实验室</span></h1>
+      <p class="title-sub">买真实硬件，拉频率、加电压、烤机、跑分 —— 把一颗 CPU 的极限榨干，再把奖金换成更强的下一套配置。</p>
+      <div class="title-cards">
+        <div class="title-card"><b>① 装机</b><span>¥8,000 开局，买 CPU、主板、内存、散热</span></div>
+        <div class="title-card"><b>② 超频</b><span>拉频率、加电压、压内存时序</span></div>
+        <div class="title-card"><b>③ 跑分</b><span>10 秒烤机通过，跑 Cinebench R23 拿奖金</span></div>
+      </div>
+      <button class="btn big title-start" id="btn-start">开始超频</button>
+      <p class="title-best" id="title-best"></p>
+      <p class="title-warn">电压不够会蓝屏，温度破 100°C 会降频；电压 ≥1.48V 还失败，有概率缩缸。真实超频有风险，别拿爱机照抄电压。</p>
+    </div>
+  </section>
+
+  <!-- ============ 主界面 ============ -->
+  <div id="app" hidden>
+    <div class="statusbar">
+      <div class="sb-row">
+        <div class="money"><small>预算余额</small><span id="sb-money">¥8,000</span></div>
+        <div class="sb-build" id="sb-build"></div>
+        <button class="btn ghost small" id="btn-sound" title="开关音效">🔊 音效开</button>
+      </div>
+    </div>
+
+    <nav class="tabs" role="tablist" aria-label="游戏步骤">
+      <button class="tab" role="tab" data-tab="shop" aria-selected="true"><span class="step">STEP 1 · 按 1</span>装机</button>
+      <button class="tab" role="tab" data-tab="oc" aria-selected="false"><span class="step">STEP 2 · 按 2</span>超频台</button>
+      <button class="tab" role="tab" data-tab="run" aria-selected="false"><span class="step">STEP 3 · 按 3</span>跑分</button>
+      <button class="tab" role="tab" data-tab="lb" aria-selected="false"><span class="step">LOCAL TOP 10 · 按 4</span>排行榜</button>
+    </nav>
+
+    <!-- 装机 -->
+    <section class="panel on" id="panel-shop">
+      <p class="hint">开局预算 ¥8,000。先配齐 CPU + 主板 + 内存 + 散热四件套才能开机超频。插槽必须对版（LGA1700 配 Intel、AM5 配 AMD）；换新件时旧件自动按 7 折回收抵扣。每颗 CPU 入手时随机抽体质——运气也是实力的一部分。</p>
+      <h2>处理器 <span class="cat-note">CPU · 体质买入时随机 0.85–1.15</span></h2>
+      <div class="grid" id="shop-cpu"></div>
+      <h2>主板 <span class="cat-note">MOTHERBOARD · 供电等级决定超频上限</span></h2>
+      <div class="grid" id="shop-board"></div>
+      <h2>内存 <span class="cat-note">DDR5 · 频率与时序影响跑分系数</span></h2>
+      <div class="grid" id="shop-ram"></div>
+      <h2>散热 <span class="cat-note">COOLER · 压不住功耗就会过热降频</span></h2>
+      <div class="grid" id="shop-cooler"></div>
+    </section>
+
+    <!-- 超频台 -->
+    <section class="panel" id="panel-oc">
+      <p class="hint">拉频率要加电压，加电压涨功耗和温度。电压不够会蓝屏，温度破 100°C 会降频甚至测试失败；电压 ≥1.48V 还失败，有概率直接缩缸——体质永久下降。</p>
+      <div class="bench">
+        <div class="box">
+          <div class="ctl">
+            <div class="ctl-head"><label for="rg-freq">目标频率（倍频）</label><span class="val" id="v-freq">—</span></div>
+            <input type="range" id="rg-freq" step="0.05" />
+            <div class="scale"><span id="s-freq-min">—</span><span id="s-freq-note"></span><span id="s-freq-max">—</span></div>
+          </div>
+          <div class="ctl">
+            <div class="ctl-head"><label for="rg-volt">核心电压 Vcore</label><span class="val" id="v-volt">—</span></div>
+            <input type="range" id="rg-volt" min="1.00" max="1.50" step="0.01" />
+            <div class="scale"><span>1.00V 安全</span><span>≥1.48V 缩缸风险区</span><span>1.50V 极限</span></div>
+          </div>
+          <div class="ctl">
+            <div class="ctl-head"><label>内存超频</label></div>
+            <div class="two">
+              <div><div class="cat-note" style="margin-bottom:4px">内存频率</div><select id="sel-memfreq"></select></div>
+              <div><div class="cat-note" style="margin-bottom:4px">时序 CL</div><select id="sel-memcl"></select></div>
+            </div>
+            <div class="scale" style="margin-top:6px"><span id="mem-note"></span></div>
+          </div>
+          <div class="warnline" id="oc-warn"></div>
+        </div>
+        <div class="box">
+          <div class="readouts">
+            <div class="ro"><div class="k">当前频率</div><div class="v" id="ro-freq">—</div></div>
+            <div class="ro volt"><div class="k">电压 / 所需电压</div><div class="v" id="ro-volt">—</div></div>
+            <div class="ro"><div class="k">预估功耗</div><div class="v" id="ro-power">—</div></div>
+            <div class="ro" id="ro-temp-box"><div class="k">满载温度预估</div><div class="v" id="ro-temp">—</div></div>
+          </div>
+          <div style="margin-top:14px">
+            <div class="k" style="font-size:11.5px;color:var(--muted)">稳定性预估</div>
+            <div class="meter"><i id="ro-stab" style="width:0%"></i></div>
+            <div style="font-family:var(--mono);font-size:13px;margin-top:4px"><span id="ro-stab-num">—</span> <span style="color:var(--dim)" id="ro-stab-txt"></span></div>
+          </div>
+          <div style="margin-top:14px;font-size:13px;color:var(--muted)" id="oc-cpu-info"></div>
+          <button class="btn big" id="btn-gotest" style="margin-top:14px">去跑压力测试 →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 跑分 -->
+    <section class="panel" id="panel-run">
+      <div class="testbox">
+        <h2 style="margin-top:0">压力测试 <span class="cat-note">STRESS TEST · 10 秒满载烤机，通过后才能跑分</span></h2>
+        <canvas id="curve" width="900" height="300"></canvas>
+        <div class="prog"><i id="test-prog"></i></div>
+        <div class="teststat">
+          <span>进度 <b id="ts-pct">0%</b></span>
+          <span>实时温度 <b id="ts-temp">—</b></span>
+          <span>实时功耗 <b id="ts-power">—</b></span>
+          <span>状态 <b id="ts-state">待机</b></span>
+        </div>
+        <button class="btn big" id="btn-stress" style="margin-top:14px">开始压力测试（10 秒）</button>
+      </div>
+      <div class="testbox">
+        <h2 style="margin-top:0">跑分 <span class="cat-note">BENCHMARK · 成功奖金 = 分数 / 100 元，登顶第 1 名额外 +¥1,000</span></h2>
+        <p class="hint" style="margin-bottom:10px">先通过当前设置的压力测试，跑分按钮才会解锁。改任何超频参数都要重新烤机。</p>
+        <button class="btn green big" id="btn-bench" disabled>跑分（需先通过压力测试）</button>
+      </div>
+    </section>
+
+    <!-- 排行榜 -->
+    <section class="panel" id="panel-lb">
+      <p class="hint">本地排行榜，成绩保存在这台设备的浏览器里（localStorage），共 10 个席位。分数相同时先提交者靠前。</p>
+      <div id="lb-wrap"></div>
+      <div style="margin-top:18px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn ghost" id="btn-clear-lb">清空排行榜</button>
+        <button class="btn ghost" id="btn-reset">重置游戏（清空存档重新开局）</button>
+      </div>
+    </section>
+
+    <p class="foot-note">超频实验室 · 硬件参数为游戏化简化，真实超频有风险，请勿拿现实爱机照抄电压。</p>
+  </div>
+</div>
+
+<!-- ============ 结算界面 ============ -->
+<div id="screen-results" class="overlay" hidden>
+  <div class="overlay-card">
+    <p class="res-kicker" id="res-kicker">跑分完成</p>
+    <h2 class="res-title">Cinebench R23</h2>
+    <div class="scorebig" id="res-score">0 cb</div>
+    <div class="scoremeta" id="res-meta"></div>
+    <div class="scoremeta" id="res-money"></div>
+    <div class="res-rank" id="res-rank"></div>
+    <div class="submitrow">
+      <input type="text" id="lb-name" maxlength="12" placeholder="输入你的名字，上榜留名" />
+      <button class="btn" id="btn-submit">提交成绩</button>
+    </div>
+    <div class="res-actions">
+      <button class="btn green" id="btn-again">再跑一次</button>
+      <button class="btn ghost" id="btn-back-shop">回装机升级</button>
+      <button class="btn ghost" id="btn-to-lb">看排行榜</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- ============ 蓝屏 ============ -->
+<div id="bsod">
+  <div class="face">:(</div>
+  <p>你的电脑遇到问题，需要重新启动。压力测试失败了——我们只收集了这句吐槽，然后你就得回去重新调电压。</p>
+  <p class="code" id="bsod-code">STOP CODE: VOLTAGE_TOO_LOW</p>
+  <p class="code" id="bsod-extra"></p>
+  <button id="bsod-ok">回到超频台</button>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/state.js"></script>
+<script src="js/sim.js"></script>
+<script src="js/sound.js"></script>
+<script src="js/shop.js"></script>
+<script src="js/bench.js"></script>
+<script src="js/boards.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
